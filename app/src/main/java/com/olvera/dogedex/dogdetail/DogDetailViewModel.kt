@@ -1,14 +1,15 @@
-package com.olvera.dogedex.doglist
+package com.olvera.dogedex.dogdetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.olvera.dogedex.model.Dog
 import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.doglist.DogRepository
+import com.olvera.dogedex.model.Dog
 import kotlinx.coroutines.launch
 
-class DogListViewModel : ViewModel() {
+class DogDetailViewModel: ViewModel() {
 
     private val _dogList = MutableLiveData<List<Dog>>()
     val dogList: LiveData<List<Dog>> get() = _dogList
@@ -18,24 +19,18 @@ class DogListViewModel : ViewModel() {
 
     private val dogRepository = DogRepository()
 
-    init {
-       getDogCollection()
-    }
-
-    private fun getDogCollection() {
+    fun addDogToUser(dogId: Long) {
         viewModelScope.launch {
             _status.value = ApiResponseStatus.Loading()
-            handleResponseStatus(dogRepository.getDogCollection())
+            handleAddDogToUserResponseStatus(dogRepository.addDogToUser(dogId))
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<List<Dog>>) {
+    private fun handleAddDogToUserResponseStatus(apiResponseStatus: ApiResponseStatus<Any>) {
         if (apiResponseStatus is ApiResponseStatus.Success) {
-            _dogList.value = apiResponseStatus.data!!
+
         }
 
-        _status.value = apiResponseStatus as ApiResponseStatus<Any>
+        _status.value = apiResponseStatus
     }
-
 }
