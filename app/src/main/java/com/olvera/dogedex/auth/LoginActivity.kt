@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.navigation.findNavController
+import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.main.MainActivity
 import com.olvera.dogedex.R
 import com.olvera.dogedex.api.ApiResponseStatus
@@ -50,6 +53,9 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
 
     }
 
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class,
+        ExperimentalCoilApi::class
+    )
     private fun startMainActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()

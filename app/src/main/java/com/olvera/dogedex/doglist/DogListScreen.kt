@@ -11,38 +11,76 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.olvera.dogedex.R
 import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.R
+import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.composables.ErrorDialog
 
 private const val GRID_SPAN_COUNT = 3
-
 
 @Composable
 @ExperimentalCoilApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
-fun DogListScreen(dogList: List<Dog>, onDogClicked: (Dog) -> Unit) {
-
-    LazyVerticalGrid(columns = GridCells.Fixed(GRID_SPAN_COUNT),
-        content = {
-            items(dogList) {
-                DogGridItem(dog = it, onDogClicked)
+fun DogListScreen(
+    onNavigationIconClick: () -> Unit,
+    dogList: List<Dog>,
+    onDogClicked: (Dog) -> Unit,
+    onErrorDialogDismiss: () -> Unit,
+    status: ApiResponseStatus<Any>? = null
+) {
+    Scaffold(
+        topBar = { DogListScreenTopBar(onNavigationIconClick) }
+    ) {
+        LazyVerticalGrid(
+            contentPadding = it,
+            columns = GridCells.Fixed(GRID_SPAN_COUNT),
+            content = {
+                items(dogList) {
+                        dog ->
+                    DogGridItem(dog = dog, onDogClicked)
+                }
             }
-        }
+        )
+    }
 
+    if (status is ApiResponseStatus.Error) {
+        ErrorDialog(status.messageId, onErrorDialogDismiss)
+    }
+}
+
+@Composable
+fun DogListScreenTopBar(onClick: () -> Unit) {
+    TopAppBar(
+        title = { Text(text = stringResource(id = R.string.my_dog_collection)) },
+        backgroundColor = Color.White,
+        contentColor = Color.Black,
+        navigationIcon = { BackNavigationIcon(onClick = onClick) }
     )
+}
+
+@Composable
+fun BackNavigationIcon(onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(
+            painter = rememberVectorPainter(image = Icons.Sharp.ArrowBack),
+            contentDescription = null
+        )
+    }
 }
 
 @Composable

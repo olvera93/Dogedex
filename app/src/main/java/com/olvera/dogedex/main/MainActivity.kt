@@ -16,6 +16,8 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.core.content.ContextCompat
 import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.LABEL_PATH
@@ -36,6 +38,8 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @ExperimentalCoilApi
+@ExperimentalFoundationApi
+@ExperimentalMaterialApi
 class MainActivity : AppCompatActivity() {
 
     private lateinit var imageCapture: ImageCapture

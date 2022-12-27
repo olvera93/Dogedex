@@ -24,6 +24,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.olvera.dogedex.R
 import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.composables.ErrorDialog
+import com.olvera.dogedex.composables.LoadingWheel
 import com.olvera.dogedex.model.Dog
 
 @ExperimentalCoilApi
@@ -65,21 +67,8 @@ fun DogDetailScreen(
         if (status is ApiResponseStatus.Loading) {
             LoadingWheel()
         } else if (status is ApiResponseStatus.Error) {
-            ErrorDialog(status, onErrorDialogDismiss)
+            ErrorDialog(status.messageId, onErrorDialogDismiss)
         }
-    }
-}
-
-@Composable
-fun LoadingWheel() {
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-
-        CircularProgressIndicator(color = Color.Red)
-
     }
 }
 
@@ -242,23 +231,6 @@ private fun LifeIcon() {
         ) {}
 
     }
-}
-
-@Composable
-fun ErrorDialog(status: ApiResponseStatus.Error<Any>, onDialogDismiss: () -> Unit) {
-    AlertDialog(onDismissRequest = { },
-        title = {
-            Text(text = stringResource(id = R.string.error_dialog_title))
-        },
-        text = {
-            Text(text = stringResource(id = status.messageId))
-        },
-        confirmButton = {
-            Button(onClick = { onDialogDismiss() }) {
-                Text(text = stringResource(id = R.string.try_again))
-            }
-        }
-    )
 }
 
 @Composable
