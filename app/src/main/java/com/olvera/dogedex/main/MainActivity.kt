@@ -1,10 +1,8 @@
 package com.olvera.dogedex.main
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.*
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,35 +14,31 @@ import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.LABEL_PATH
 import com.olvera.dogedex.MODEL_PATH
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.api.ApiServiceInterceptor
 import com.olvera.dogedex.auth.LoginActivity
 import com.olvera.dogedex.databinding.ActivityMainBinding
-import com.olvera.dogedex.dogdetail.DogDetailActivity
-import com.olvera.dogedex.dogdetail.DogDetailActivity.Companion.DOG_KEY
-import com.olvera.dogedex.dogdetail.DogDetailActivity.Companion.IS_RECOGNITION_KEY
+import com.olvera.dogedex.dogdetail.DogDetailComposeActivity
 import com.olvera.dogedex.doglist.DogListActivity
-import com.olvera.dogedex.machinelearning.Classifier
 import com.olvera.dogedex.machinelearning.DogRecognition
 import com.olvera.dogedex.model.Dog
 import com.olvera.dogedex.model.User
 import com.olvera.dogedex.settings.SettingsActivity
 import org.tensorflow.lite.support.common.FileUtil
-import java.io.ByteArrayOutputStream
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@ExperimentalCoilApi
 class MainActivity : AppCompatActivity() {
 
     private lateinit var imageCapture: ImageCapture
     private lateinit var cameraExecutor: ExecutorService
-    private lateinit var classifier: Classifier
     private var isCameraReady = false
 
     private val viewModel: MainViewModel by viewModels()
@@ -117,9 +111,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openDetailActivity(dog: Dog) {
-        val intent = Intent(this, DogDetailActivity::class.java)
-        intent.putExtra(DOG_KEY, dog)
-        intent.putExtra(IS_RECOGNITION_KEY, true)
+        val intent = Intent(this, DogDetailComposeActivity::class.java)
+        intent.putExtra(DogDetailComposeActivity.DOG_KEY, dog)
+        intent.putExtra(DogDetailComposeActivity.IS_RECOGNITION_KEY, true)
         startActivity(intent)
     }
 

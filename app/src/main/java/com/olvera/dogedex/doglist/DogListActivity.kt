@@ -7,13 +7,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.databinding.ActivityDogListBinding
-import com.olvera.dogedex.dogdetail.DogDetailActivity
+import com.olvera.dogedex.dogdetail.DogDetailComposeActivity
 
 private const val GRID_SPAN_COUNT = 3
 
+@ExperimentalCoilApi
 class DogListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDogListBinding
@@ -33,8 +34,8 @@ class DogListActivity : AppCompatActivity() {
         val adapter = DogAdapter()
         adapter.setOnItemClickListener {
             // Pasar el dog a DogDetailActivity
-            val intent = Intent(this, DogDetailActivity::class.java)
-            intent.putExtra(DogDetailActivity.DOG_KEY, it)
+            val intent = Intent(this, DogDetailComposeActivity::class.java)
+            intent.putExtra(DogDetailComposeActivity.DOG_KEY, it)
             startActivity(intent)
         }
 
