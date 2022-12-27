@@ -41,7 +41,7 @@ class DogListActivity : AppCompatActivity() {
 
         recycler.adapter = adapter
 
-        dogListViewModel.dogList.observe(this) {
+       /* dogListViewModel.dogList.observe(this) {
             dogList ->
             adapter.submitList(dogList)
         }
@@ -59,7 +59,7 @@ class DogListActivity : AppCompatActivity() {
 
                 is ApiResponseStatus.Success -> loadingWhell.visibility = View.GONE
             }
-        }
+        }*/
 
 
     }

@@ -26,6 +26,7 @@ import com.olvera.dogedex.auth.LoginActivity
 import com.olvera.dogedex.databinding.ActivityMainBinding
 import com.olvera.dogedex.dogdetail.DogDetailComposeActivity
 import com.olvera.dogedex.doglist.DogListActivity
+import com.olvera.dogedex.doglist.DogListComposeActivity
 import com.olvera.dogedex.machinelearning.DogRecognition
 import com.olvera.dogedex.model.Dog
 import com.olvera.dogedex.model.User
@@ -263,7 +264,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openDogListActivity() {
-        startActivity(Intent(this, DogListActivity::class.java))
+        startActivity(Intent(this, DogListComposeActivity::class.java))
     }
 
     private fun openSettingsActivity() {
