@@ -25,6 +25,7 @@ import com.olvera.dogedex.MODEL_PATH
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.api.ApiServiceInterceptor
 import com.olvera.dogedex.auth.LoginActivity
+import com.olvera.dogedex.auth.LoginComposeActivity
 import com.olvera.dogedex.databinding.ActivityMainBinding
 import com.olvera.dogedex.dogdetail.DogDetailComposeActivity
 import com.olvera.dogedex.doglist.DogListActivity
@@ -276,7 +277,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openLoginActivity() {
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, LoginComposeActivity::class.java))
         finish()
     }
 }
