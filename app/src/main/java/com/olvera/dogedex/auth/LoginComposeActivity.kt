@@ -17,7 +17,7 @@ class LoginComposeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DogedexTheme {
-                LoginScreen()
+                AuthScreen()
             }
         }
     }

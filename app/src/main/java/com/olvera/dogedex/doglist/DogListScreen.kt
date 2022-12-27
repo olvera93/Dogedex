@@ -44,7 +44,7 @@ fun DogListScreen(
     status: ApiResponseStatus<Any>? = null
 ) {
     Scaffold(
-        topBar = { DogListScreenTopBar(onNavigationIconClick) }
+        topBar = { BackNavigationIcon(onNavigationIconClick) }
     ) {
         LazyVerticalGrid(
             contentPadding = it,
@@ -61,16 +61,6 @@ fun DogListScreen(
     if (status is ApiResponseStatus.Error) {
         ErrorDialog(status.messageId, onErrorDialogDismiss)
     }
-}
-
-@Composable
-fun DogListScreenTopBar(onClick: () -> Unit) {
-    TopAppBar(
-        title = { Text(text = stringResource(id = R.string.my_dog_collection)) },
-        backgroundColor = Color.White,
-        contentColor = Color.Black,
-        navigationIcon = { BackNavigationIcon(onClick = onClick) }
-    )
 }
 
 @Composable
