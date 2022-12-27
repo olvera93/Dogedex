@@ -42,7 +42,7 @@ class DogDetailActivity : AppCompatActivity() {
         binding.dog = dog
         binding.dogImage.load(dog.imageUrl)
 
-        viewModel.status.observe(this) {
+        /*viewModel.status.observe(this) {
                 status ->
 
             when(status) {
@@ -58,7 +58,7 @@ class DogDetailActivity : AppCompatActivity() {
                     finish()
                 }
             }
-        }
+        }*/
 
 
         binding.closeButton.setOnClickListener {

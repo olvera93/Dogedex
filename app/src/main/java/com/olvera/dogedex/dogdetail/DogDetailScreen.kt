@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,18 +23,22 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.olvera.dogedex.R
+import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.model.Dog
 
 @ExperimentalCoilApi
 @Composable
-fun DogDetailScreen(dog: Dog) {
+fun DogDetailScreen(
+    dog: Dog, status: ApiResponseStatus<Any>? = null,
+    onButtonClicked: () -> Unit,
+    onErrorDialogDismiss: () -> Unit
+) {
 
     Box(
         modifier = Modifier
             .background(colorResource(id = R.color.secondary_background))
             .padding(start = 8.dp, end = 8.dp, bottom = 16.dp)
-            .fillMaxSize()
-        ,
+            .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
 
@@ -48,13 +53,32 @@ fun DogDetailScreen(dog: Dog) {
 
         FloatingActionButton(
             modifier = Modifier.align(alignment = Alignment.BottomCenter),
-            onClick = { }) {
+            onClick = { onButtonClicked() }) {
 
             Icon(
                 imageVector = Icons.Filled.Check,
-                contentDescription = "")
+                contentDescription = ""
+            )
 
         }
+
+        if (status is ApiResponseStatus.Loading) {
+            LoadingWheel()
+        } else if (status is ApiResponseStatus.Error) {
+            ErrorDialog(status, onErrorDialogDismiss)
+        }
+    }
+}
+
+@Composable
+fun LoadingWheel() {
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+
+        CircularProgressIndicator(color = Color.Red)
 
     }
 }
@@ -201,6 +225,7 @@ private fun LifeIcon() {
             Icon(
                 painter = painterResource(id = R.drawable.ic_hearth_white),
                 contentDescription = null,
+                tint = Color.White,
                 modifier = Modifier
                     .width(24.dp)
                     .height(24.dp)
@@ -219,6 +244,22 @@ private fun LifeIcon() {
     }
 }
 
+@Composable
+fun ErrorDialog(status: ApiResponseStatus.Error<Any>, onDialogDismiss: () -> Unit) {
+    AlertDialog(onDismissRequest = { },
+        title = {
+            Text(text = stringResource(id = R.string.error_dialog_title))
+        },
+        text = {
+            Text(text = stringResource(id = status.messageId))
+        },
+        confirmButton = {
+            Button(onClick = { onDialogDismiss() }) {
+                Text(text = stringResource(id = R.string.try_again))
+            }
+        }
+    )
+}
 
 @Composable
 private fun VerticalDivider() {
@@ -301,7 +342,7 @@ fun DogDetailScreenPreview() {
         "5",
         "6"
     )
-    DogDetailScreen(dog)
+    DogDetailScreen(dog, onButtonClicked = { }, onErrorDialogDismiss = { })
 }
 
 
