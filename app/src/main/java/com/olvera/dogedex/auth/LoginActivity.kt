@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
         setContentView(binding.root)
 
 
-        viewModel.status.observe(this) { status ->
+        /*viewModel.status.observe(this) { status ->
             when (status) {
                 is ApiResponseStatus.Error -> {
                     binding.loadingWheel.visibility = View.GONE
@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
                 User.setLoggedInUser(this, user)
                 startMainActivity()
             }
-        }
+        }*/
 
     }
 

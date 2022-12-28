@@ -1,43 +1,81 @@
 package com.olvera.dogedex.auth
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.olvera.dogedex.R
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.model.User
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
 
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User> get() = _user
+    var user = mutableStateOf<User?>(null)
+        private set
 
-    private val _status = MutableLiveData<ApiResponseStatus<User>>()
-    val status: LiveData<ApiResponseStatus<User>> get() = _status
+    var status = mutableStateOf<ApiResponseStatus<User>?>(null)
+        private set
+
+    var emailError = mutableStateOf<Int?>(null)
+        private set
+
+    var passwordError = mutableStateOf<Int?>(null)
+        private set
+
+    var confirmPasswordError = mutableStateOf<Int?>(null)
+        private set
 
     private val authRepository = AuthRepository()
 
     fun signUp(email: String, password: String, passwordConfirmation: String) {
 
+        when {
+            email.isEmpty() -> {
+                emailError.value = R.string.email_is_not_valid
+            }
+            password.isEmpty() -> {
+                passwordError.value = R.string.password_must_not_be_empty
+            }
+            passwordConfirmation.isEmpty() -> {
+                confirmPasswordError.value = R.string.password_must_not_be_empty
+            }
+            password != passwordConfirmation -> {
+                passwordError.value = R.string.passwords_do_not_match
+                confirmPasswordError.value = R.string.passwords_do_not_match
+
+            }
+        }
+
         viewModelScope.launch {
-            _status.value = ApiResponseStatus.Loading()
+            status.value = ApiResponseStatus.Loading()
             handleResponseStatus(authRepository.signUp(email, password, passwordConfirmation))
         }
     }
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
-            _status.value = ApiResponseStatus.Loading()
+            status.value = ApiResponseStatus.Loading()
             handleResponseStatus(authRepository.signIn(email, password))
         }
     }
 
+    fun resetErrors() {
+        emailError.value = null
+        passwordError.value = null
+        confirmPasswordError.value = null
+    }
+
     private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<User>) {
         if (apiResponseStatus is ApiResponseStatus.Success) {
-            _user.value = apiResponseStatus.data!!
+            user.value = apiResponseStatus.data!!
         }
-        _status.value = apiResponseStatus
+        status.value = apiResponseStatus
+    }
+
+    fun resetApiResponseStatus() {
+        status.value = null
     }
 
 }

@@ -27,21 +27,32 @@ import com.olvera.dogedex.composables.AuthField
 @ExperimentalFoundationApi
 @ExperimentalCoilApi
 fun LoginScreen(
+    onLoginButtonClick: (String, String) -> Unit,
     status: ApiResponseStatus<Any>? = null,
-    onRegisterButtonClick: () -> Unit
+    onRegisterButtonClick: () -> Unit,
+    authViewModel: AuthViewModel
+
 ) {
 
     Scaffold(
         topBar = { LoginScreenToolbar() }
     ) {
-        Content(onRegisterButtonClick = onRegisterButtonClick)
+        Content(
+            resetFieldErrors = { authViewModel.resetErrors() },
+            onLoginButtonClick = onLoginButtonClick,
+            onRegisterButtonClick = onRegisterButtonClick,
+            authViewModel = authViewModel
+        )
 
     }
 }
 
 @Composable
 private fun Content(
-    onRegisterButtonClick: () -> Unit
+    resetFieldErrors: () -> Unit,
+    onLoginButtonClick: (String, String) -> Unit,
+    onRegisterButtonClick: () -> Unit,
+    authViewModel: AuthViewModel
 ) {
 
     val email = remember {
@@ -62,7 +73,11 @@ private fun Content(
         AuthField(
             label = stringResource(id = R.string.email),
             modifier = Modifier.fillMaxWidth(),
-            email = email.value, onTextChanged = { email.value = it }
+            email = email.value, onTextChanged = {
+                email.value = it
+                resetFieldErrors()
+            },
+            errorMessageId = authViewModel.emailError.value
         )
 
         AuthField(
@@ -70,15 +85,20 @@ private fun Content(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
-            email = password.value, onTextChanged = { password.value = it },
-            visualTransformation = PasswordVisualTransformation()
+            email = password.value, onTextChanged = {
+                password.value = it
+                resetFieldErrors()
+            },
+            visualTransformation = PasswordVisualTransformation(),
+            errorMessageId = authViewModel.passwordError.value
+
         )
 
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
-            onClick = { }) {
+            onClick = { onLoginButtonClick(email.value, password.value) }) {
 
             Text(
                 text = stringResource(id = R.string.login),

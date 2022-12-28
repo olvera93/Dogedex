@@ -29,6 +29,7 @@ import com.olvera.dogedex.model.Dog
 import com.olvera.dogedex.R
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.composables.ErrorDialog
+import com.olvera.dogedex.composables.LoadingWheel
 
 private const val GRID_SPAN_COUNT = 3
 
@@ -58,8 +59,10 @@ fun DogListScreen(
         )
     }
 
-    if (status is ApiResponseStatus.Error) {
-        ErrorDialog(status.messageId, onErrorDialogDismiss)
+    if (status is ApiResponseStatus.Loading) {
+        LoadingWheel()
+    } else if (status is ApiResponseStatus.Error) {
+        ErrorDialog(messageId = status.messageId, onErrorDialogDismiss)
     }
 }
 

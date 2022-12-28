@@ -26,13 +26,19 @@ import com.olvera.dogedex.composables.BackNavigationIcon
 @ExperimentalFoundationApi
 @ExperimentalCoilApi
 fun SignUpScreen(
-    onNavigationIconClick: () -> Unit
+    onSignUpButtonClick: (String, String, String) -> Unit,
+    onNavigationIconClick: () -> Unit,
+    authViewModel: AuthViewModel
 
 ) {
 
     Scaffold(topBar = { SignUpScreenToolBar(onNavigationIconClick) }) {
 
-        Content()
+        Content(
+            resetFieldErrors = { authViewModel.resetErrors() },
+            onSignUpButtonClick = onSignUpButtonClick,
+            authViewModel = authViewModel
+        )
 
     }
 
@@ -40,7 +46,11 @@ fun SignUpScreen(
 }
 
 @Composable
-internal fun Content() {
+internal fun Content(
+    resetFieldErrors: () -> Unit,
+    onSignUpButtonClick: (String, String, String) -> Unit,
+    authViewModel: AuthViewModel
+) {
 
     val email = remember {
         mutableStateOf("")
@@ -65,7 +75,11 @@ internal fun Content() {
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = R.string.email),
             email = email.value,
-            onTextChanged = { email.value = it }
+            onTextChanged = {
+                email.value = it
+                resetFieldErrors()
+            },
+            errorMessageId = authViewModel.emailError.value
         )
 
         AuthField(
@@ -74,8 +88,13 @@ internal fun Content() {
                 .padding(top = 16.dp),
             label = stringResource(id = R.string.password),
             email = password.value,
-            onTextChanged = { password.value = it },
-            visualTransformation = PasswordVisualTransformation()
+            onTextChanged = {
+                password.value = it
+                resetFieldErrors()
+            },
+            visualTransformation = PasswordVisualTransformation(),
+            errorMessageId = authViewModel.passwordError.value
+
         )
 
         AuthField(
@@ -84,15 +103,20 @@ internal fun Content() {
                 .padding(top = 16.dp),
             label = stringResource(id = R.string.confirm_password),
             email = confirmPassword.value,
-            onTextChanged = { confirmPassword.value = it },
-            visualTransformation = PasswordVisualTransformation()
+            onTextChanged = {
+                confirmPassword.value = it
+                resetFieldErrors()
+            },
+            visualTransformation = PasswordVisualTransformation(),
+            errorMessageId = authViewModel.confirmPasswordError.value
+
         )
 
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
-            onClick = { }) {
+            onClick = { onSignUpButtonClick(email.value, password.value, confirmPassword.value) }) {
 
             Text(
                 text = stringResource(id = R.string.sign_up),
@@ -115,8 +139,10 @@ fun SignUpScreenToolBar(
         title = { Text(text = stringResource(id = R.string.app_name)) },
         backgroundColor = Color.Red,
         contentColor = Color.White,
-        navigationIcon = { BackNavigationIcon {
-            onNavigationIconClick()
-        } }
+        navigationIcon = {
+            BackNavigationIcon {
+                onNavigationIconClick()
+            }
+        }
     )
 }
