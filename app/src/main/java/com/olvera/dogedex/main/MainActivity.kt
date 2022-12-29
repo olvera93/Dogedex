@@ -34,6 +34,7 @@ import com.olvera.dogedex.machinelearning.DogRecognition
 import com.olvera.dogedex.model.Dog
 import com.olvera.dogedex.model.User
 import com.olvera.dogedex.settings.SettingsActivity
+import dagger.hilt.android.AndroidEntryPoint
 import org.tensorflow.lite.support.common.FileUtil
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -41,6 +42,7 @@ import java.util.concurrent.Executors
 @ExperimentalCoilApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var imageCapture: ImageCapture
@@ -135,14 +137,6 @@ class MainActivity : AppCompatActivity() {
             startCamera()
             isCameraReady = true
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.setupClassifier(
-            FileUtil.loadMappedFile(this@MainActivity, MODEL_PATH),
-            FileUtil.loadLabels(this@MainActivity, LABEL_PATH)
-        )
     }
 
     override fun onDestroy() {

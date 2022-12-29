@@ -3,18 +3,32 @@ package com.olvera.dogedex.doglist
 import com.olvera.dogedex.R
 import com.olvera.dogedex.model.Dog
 import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.api.ApiService
 import com.olvera.dogedex.api.DogsApi.retrofitService
 import com.olvera.dogedex.api.dto.AddDogToUserDto
 import com.olvera.dogedex.api.dto.DogDtoMapper
 import com.olvera.dogedex.api.makeNetworkCall
+import com.olvera.dogedex.di.DispatchersModule
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DogRepository {
+interface DogTasks {
+    suspend fun getDogCollection(): ApiResponseStatus<List<Dog>>
+    suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any>
+    suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog>
+}
 
-    suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
-        return withContext(Dispatchers.IO) {
+class DogRepository @Inject constructor(
+    private val apiService: ApiService,
+    @DispatchersModule.IoDispatcher private val dispatcher: CoroutineDispatcher
+
+) : DogTasks{
+
+    override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
+        return withContext(dispatcher) {
             val allDogsListDeferred = async { downloadDogs() }
             val userDogsListDeferred = async { getUserDogs() }
 
@@ -50,15 +64,15 @@ class DogRepository {
 
 
     private suspend fun downloadDogs(): ApiResponseStatus<List<Dog>> = makeNetworkCall {
-        val dogListApiResponse = retrofitService.getAllDogs()
+        val dogListApiResponse = apiService.getAllDogs()
         val dogDtoList = dogListApiResponse.data.dogs
         val dogDtoMapper = DogDtoMapper()
         dogDtoMapper.fromDogDtoListToDogDomainList(dogDtoList)
     }
 
-    suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> = makeNetworkCall {
+    override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> = makeNetworkCall {
         val addDogToUserDto = AddDogToUserDto(dogId)
-        val defaultResponse = retrofitService.addDogToUser(addDogToUserDto)
+        val defaultResponse = apiService.addDogToUser(addDogToUserDto)
 
         if (!defaultResponse.isSuccess) {
             throw Exception(defaultResponse.message)
@@ -66,14 +80,14 @@ class DogRepository {
     }
 
     private suspend fun getUserDogs(): ApiResponseStatus<List<Dog>> = makeNetworkCall {
-        val dogListApiResponse = retrofitService.getUserDogs()
+        val dogListApiResponse = apiService.getUserDogs()
         val dogDtoList = dogListApiResponse.data.dogs
         val dogDtoMapper = DogDtoMapper()
         dogDtoMapper.fromDogDtoListToDogDomainList(dogDtoList)
     }
 
-    suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> = makeNetworkCall {
-        val response = retrofitService.getDogByMlId(mlDogId)
+    override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> = makeNetworkCall {
+        val response = apiService.getDogByMlId(mlDogId)
 
         if (!response.isSuccess) {
             throw Exception(response.message)

@@ -12,10 +12,12 @@ import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.auth.ui.theme.DogedexTheme
 import com.olvera.dogedex.main.MainActivity
 import com.olvera.dogedex.model.User
+import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
+@AndroidEntryPoint
 class LoginComposeActivity : ComponentActivity() {
 
     private val viewModel: AuthViewModel by viewModels()

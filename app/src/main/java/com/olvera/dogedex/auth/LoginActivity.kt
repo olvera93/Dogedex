@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
     SignUpFragment.SignUpFragmentActions {
 
 
-    private val viewModel: AuthViewModel by viewModels()
+   // private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
     }
 
     override fun onSignInFieldsValidated(email: String, password: String) {
-        viewModel.signIn(email, password)
+        //viewModel.signIn(email, password)
     }
 
     override fun onSignUpFieldsValidated(
@@ -85,6 +85,6 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
         password: String,
         passwordConfirmation: String
     ) {
-        viewModel.signUp(email, password, passwordConfirmation)
+        //viewModel.signUp(email, password, passwordConfirmation)
     }
 }

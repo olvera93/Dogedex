@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.olvera.dogedex.model.Dog
@@ -39,20 +40,23 @@ private const val GRID_SPAN_COUNT = 3
 @ExperimentalMaterialApi
 fun DogListScreen(
     onNavigationIconClick: () -> Unit,
-    dogList: List<Dog>,
     onDogClicked: (Dog) -> Unit,
-    onErrorDialogDismiss: () -> Unit,
-    status: ApiResponseStatus<Any>? = null
+    viewModel: DogListViewModel = hiltViewModel()
 ) {
+
+    val status = viewModel.status.value
+    val dogList = viewModel.dogList.value
+
     Scaffold(
-        topBar = { BackNavigationIcon(onNavigationIconClick) }
+        topBar = { BackNavigationIcon(onNavigationIconClick)
+        }
+
     ) {
         LazyVerticalGrid(
             contentPadding = it,
             columns = GridCells.Fixed(GRID_SPAN_COUNT),
             content = {
-                items(dogList) {
-                        dog ->
+                items(dogList) { dog ->
                     DogGridItem(dog = dog, onDogClicked)
                 }
             }
@@ -62,7 +66,9 @@ fun DogListScreen(
     if (status is ApiResponseStatus.Loading) {
         LoadingWheel()
     } else if (status is ApiResponseStatus.Error) {
-        ErrorDialog(messageId = status.messageId, onErrorDialogDismiss)
+        ErrorDialog(messageId = status.messageId) {
+            viewModel.resetApiResponseStatus()
+        }
     }
 }
 

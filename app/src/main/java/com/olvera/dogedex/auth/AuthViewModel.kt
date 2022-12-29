@@ -8,9 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.olvera.dogedex.R
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.model.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel : ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val authRepository: AuthTasks
+
+): ViewModel() {
 
     var user = mutableStateOf<User?>(null)
         private set
@@ -27,7 +33,6 @@ class AuthViewModel : ViewModel() {
     var confirmPasswordError = mutableStateOf<Int?>(null)
         private set
 
-    private val authRepository = AuthRepository()
 
     fun signUp(email: String, password: String, passwordConfirmation: String) {
 

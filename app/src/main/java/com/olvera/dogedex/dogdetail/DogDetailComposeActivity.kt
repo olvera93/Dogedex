@@ -10,8 +10,10 @@ import com.olvera.dogedex.R
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.dogdetail.ui.theme.DogedexTheme
 import com.olvera.dogedex.model.Dog
+import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalCoilApi
+@AndroidEntryPoint
 class DogDetailComposeActivity : ComponentActivity() {
 
     companion object {

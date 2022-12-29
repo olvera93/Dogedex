@@ -5,17 +5,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.olvera.dogedex.model.Dog
 import com.olvera.dogedex.api.ApiResponseStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DogListViewModel : ViewModel() {
+@HiltViewModel
+class DogListViewModel @Inject constructor(
+    private val dogRepository: DogTasks
+): ViewModel() {
 
     var dogList = mutableStateOf<List<Dog>>(listOf())
         private set
 
     var status = mutableStateOf<ApiResponseStatus<Any>?>(null)
         private set
-
-    private val dogRepository = DogRepository()
 
     init {
         getDogCollection()

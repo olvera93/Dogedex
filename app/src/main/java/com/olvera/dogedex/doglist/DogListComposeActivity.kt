@@ -11,31 +11,22 @@ import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.dogdetail.DogDetailComposeActivity
 import com.olvera.dogedex.doglist.ui.theme.DogedexTheme
 import com.olvera.dogedex.model.Dog
+import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalCoilApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
+@AndroidEntryPoint
 class DogListComposeActivity : ComponentActivity() {
-
-    private val viewModel: DogListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
-            val status = viewModel.status
-
             DogedexTheme {
-
-                val dogList = viewModel.dogList
-               DogListScreen(
-                   onNavigationIconClick = ::onNavigationIconClick,
-                   dogList = dogList.value,
-                   onDogClicked = ::openDogDetailActivity,
-                   status = status.value,
-                   onErrorDialogDismiss = ::resetApiResponseStatus
-
-               )
+                DogListScreen(
+                    onNavigationIconClick = ::onNavigationIconClick,
+                    onDogClicked = ::openDogDetailActivity,
+                )
             }
         }
     }
@@ -48,10 +39,6 @@ class DogListComposeActivity : ComponentActivity() {
 
     private fun onNavigationIconClick() {
         finish()
-    }
-
-    private fun resetApiResponseStatus() {
-        viewModel.resetApiResponseStatus()
     }
 
 }
