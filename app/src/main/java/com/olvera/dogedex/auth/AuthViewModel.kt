@@ -16,7 +16,7 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthTasks
 
-): ViewModel() {
+) : ViewModel() {
 
     var user = mutableStateOf<User?>(null)
         private set
@@ -60,10 +60,20 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signIn(email: String, password: String) {
-        viewModelScope.launch {
-            status.value = ApiResponseStatus.Loading()
-            handleResponseStatus(authRepository.signIn(email, password))
+
+        when {
+            email.isEmpty() -> emailError.value = R.string.email_is_not_valid
+            password.isEmpty() -> passwordError.value = R.string.password_must_not_be_empty
+
+            else -> {
+                viewModelScope.launch {
+                    status.value = ApiResponseStatus.Loading()
+                    handleResponseStatus(authRepository.signIn(email, password))
+                }
+            }
         }
+
+
     }
 
     fun resetErrors() {
