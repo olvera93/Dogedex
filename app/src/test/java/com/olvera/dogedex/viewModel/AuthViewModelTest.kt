@@ -1,5 +1,6 @@
-package com.olvera.dogedex
+package com.olvera.dogedex.viewModel
 
+import com.olvera.dogedex.R
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.auth.AuthTasks
 import com.olvera.dogedex.auth.AuthViewModel

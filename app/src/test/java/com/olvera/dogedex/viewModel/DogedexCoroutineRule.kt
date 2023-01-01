@@ -1,4 +1,4 @@
-package com.olvera.dogedex
+package com.olvera.dogedex.viewModel
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,4 +1,4 @@
-package com.olvera.dogedex
+package com.olvera.dogedex.viewModel
 
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.doglist.DogListViewModel
