@@ -31,6 +31,7 @@ import coil.compose.rememberImagePainter
 import com.olvera.dogedex.model.Dog
 import com.olvera.dogedex.R
 import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.composables.BackNavigationIcon
 import com.olvera.dogedex.composables.ErrorDialog
 import com.olvera.dogedex.composables.LoadingWheel
 
@@ -51,7 +52,7 @@ fun DogListScreen(
 
     Scaffold(
         topBar = {
-            BackNavigationIcon(onNavigationIconClick)
+            DogListScreenTopBar(onNavigationIconClick)
         }
 
     ) {
@@ -76,13 +77,13 @@ fun DogListScreen(
 }
 
 @Composable
-fun BackNavigationIcon(onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
-        Icon(
-            painter = rememberVectorPainter(image = Icons.Sharp.ArrowBack),
-            contentDescription = null
-        )
-    }
+fun DogListScreenTopBar(onClick: () -> Unit) {
+    TopAppBar(
+        title = { Text(text = stringResource(id = R.string.my_dog_collection)) },
+        backgroundColor = Color.White,
+        contentColor = Color.Black,
+        navigationIcon = { BackNavigationIcon(onClick) }
+    )
 }
 
 @Composable
