@@ -2,7 +2,6 @@ package com.olvera.dogedex
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import coil.annotation.ExperimentalCoilApi

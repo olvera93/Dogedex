@@ -3,6 +3,7 @@ package com.olvera.dogedex.auth
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,25 +21,34 @@ import com.olvera.dogedex.model.User
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 fun AuthScreen(
-    status: ApiResponseStatus<User>?,
-    onLoginButtonClick: (String, String) -> Unit,
-    onSignUpButtonClick: (String, String, String) -> Unit,
-    onErrorDialogDismiss: () -> Unit,
-    authViewModel: AuthViewModel
+    onUserLoggedIn: (User) -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
+    val status = authViewModel.status.value
+
+    val user = authViewModel.user
+
+    val userValue = user.value
+    if (userValue != null) {
+        onUserLoggedIn(userValue)
+    }
 
     AuthNavHost(
         navController = navController,
-        onLoginButtonClick = onLoginButtonClick,
-        onSignUpButtonClick = onSignUpButtonClick,
+        onLoginButtonClick = { email, password -> authViewModel.signIn(email, password) },
+        onSignUpButtonClick = { email, password, confirmPassword -> authViewModel.signUp(
+            email,
+            password,
+            confirmPassword
+        ) },
         authViewModel = authViewModel
     )
 
     if (status is ApiResponseStatus.Loading) {
         LoadingWheel()
     } else if (status is ApiResponseStatus.Error) {
-        ErrorDialog(messageId = status.messageId, onErrorDialogDismiss)
+        ErrorDialog(messageId = status.messageId) { authViewModel.resetApiResponseStatus() }
     }
 }
 
