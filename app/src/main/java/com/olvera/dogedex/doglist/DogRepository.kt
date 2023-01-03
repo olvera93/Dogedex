@@ -1,13 +1,13 @@
 package com.olvera.dogedex.doglist
 
 import com.olvera.dogedex.R
-import com.olvera.dogedex.model.Dog
-import com.olvera.dogedex.api.ApiResponseStatus
-import com.olvera.dogedex.api.ApiService
-import com.olvera.dogedex.api.dto.AddDogToUserDto
-import com.olvera.dogedex.api.dto.DogDtoMapper
-import com.olvera.dogedex.api.makeNetworkCall
-import com.olvera.dogedex.di.DispatchersModule
+import com.olvera.dogedex.core.model.Dog
+import com.olvera.dogedex.core.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiService
+import com.olvera.dogedex.core.api.dto.AddDogToUserDto
+import com.olvera.dogedex.core.api.dto.DogDtoMapper
+import com.olvera.dogedex.core.api.makeNetworkCall
+import com.olvera.dogedex.core.di.DispatchersModule
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -60,44 +60,61 @@ class DogRepository @Inject constructor(
             if (userDogList.contains(it)) {
                 it
             } else {
-                Dog(0, it.index, "", "", "", "", "", "", "", "", "", inCollection = false)
+                Dog(
+                    0,
+                    it.index,
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    inCollection = false
+                )
             }
         }.sorted()
 
 
-    private suspend fun downloadDogs(): ApiResponseStatus<List<Dog>> = makeNetworkCall {
-        val dogListApiResponse = apiService.getAllDogs()
-        val dogDtoList = dogListApiResponse.data.dogs
-        val dogDtoMapper = DogDtoMapper()
-        dogDtoMapper.fromDogDtoListToDogDomainList(dogDtoList)
-    }
-
-    override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> = makeNetworkCall {
-        val addDogToUserDto = AddDogToUserDto(dogId)
-        val defaultResponse = apiService.addDogToUser(addDogToUserDto)
-
-        if (!defaultResponse.isSuccess) {
-            throw Exception(defaultResponse.message)
-        }
-    }
-
-    private suspend fun getUserDogs(): ApiResponseStatus<List<Dog>> = makeNetworkCall {
-        val dogListApiResponse = apiService.getUserDogs()
-        val dogDtoList = dogListApiResponse.data.dogs
-        val dogDtoMapper = DogDtoMapper()
-        dogDtoMapper.fromDogDtoListToDogDomainList(dogDtoList)
-    }
-
-    override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> = makeNetworkCall {
-        val response = apiService.getDogByMlId(mlDogId)
-
-        if (!response.isSuccess) {
-            throw Exception(response.message)
+    private suspend fun downloadDogs(): ApiResponseStatus<List<Dog>> =
+        makeNetworkCall {
+            val dogListApiResponse = apiService.getAllDogs()
+            val dogDtoList = dogListApiResponse.data.dogs
+            val dogDtoMapper = DogDtoMapper()
+            dogDtoMapper.fromDogDtoListToDogDomainList(dogDtoList)
         }
 
-        val dogDtoMapper = DogDtoMapper()
-        dogDtoMapper.fromDogDtoToDogDomain(response.data.dog)
-    }
+    override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> =
+        makeNetworkCall {
+            val addDogToUserDto = AddDogToUserDto(dogId)
+            val defaultResponse = apiService.addDogToUser(addDogToUserDto)
+
+            if (!defaultResponse.isSuccess) {
+                throw Exception(defaultResponse.message)
+            }
+        }
+
+    private suspend fun getUserDogs(): ApiResponseStatus<List<Dog>> =
+        makeNetworkCall {
+            val dogListApiResponse = apiService.getUserDogs()
+            val dogDtoList = dogListApiResponse.data.dogs
+            val dogDtoMapper = DogDtoMapper()
+            dogDtoMapper.fromDogDtoListToDogDomainList(dogDtoList)
+        }
+
+    override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> =
+        makeNetworkCall {
+            val response = apiService.getDogByMlId(mlDogId)
+
+            if (!response.isSuccess) {
+                throw Exception(response.message)
+            }
+
+            val dogDtoMapper = DogDtoMapper()
+            dogDtoMapper.fromDogDtoToDogDomain(response.data.dog)
+        }
 
     override suspend fun getProbableDogs(probableDogsIds: ArrayList<String>): Flow<ApiResponseStatus<Dog>> =
         flow {

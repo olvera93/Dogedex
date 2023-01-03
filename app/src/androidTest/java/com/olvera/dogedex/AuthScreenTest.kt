@@ -8,11 +8,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import coil.annotation.ExperimentalCoilApi
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.auth.AuthScreen
 import com.olvera.dogedex.auth.AuthTasks
 import com.olvera.dogedex.auth.AuthViewModel
-import com.olvera.dogedex.model.User
+import com.olvera.dogedex.core.model.User
 import org.junit.Rule
 import org.junit.Test
 
@@ -28,7 +28,7 @@ class AuthScreenTest {
     fun testTappingRegisterButtonOpenSignUpScreen() {
 
         class FakeAuthRepository : AuthTasks {
-            override suspend fun signIn(email: String, password: String): ApiResponseStatus<User> {
+            override suspend fun signIn(email: String, password: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.User> {
                 TODO("Not yet implemented")
             }
 
@@ -36,7 +36,7 @@ class AuthScreenTest {
                 email: String,
                 password: String,
                 passwordConfirmation: String
-            ): ApiResponseStatus<User> {
+            ): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.User> {
                 TODO("Not yet implemented")
             }
 
@@ -60,7 +60,7 @@ class AuthScreenTest {
     fun testEmailErrorShowsIfTappingLoginButtonAndNotEmail() {
 
         class FakeAuthRepository : AuthTasks {
-            override suspend fun signIn(email: String, password: String): ApiResponseStatus<User> {
+            override suspend fun signIn(email: String, password: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.User> {
                 TODO("Not yet implemented")
             }
 
@@ -68,7 +68,7 @@ class AuthScreenTest {
                 email: String,
                 password: String,
                 passwordConfirmation: String
-            ): ApiResponseStatus<User> {
+            ): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.User> {
                 TODO("Not yet implemented")
             }
 

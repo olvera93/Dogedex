@@ -12,9 +12,9 @@ import androidx.navigation.findNavController
 import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.main.MainActivity
 import com.olvera.dogedex.R
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.databinding.ActivityLoginBinding
-import com.olvera.dogedex.model.User
+import com.olvera.dogedex.core.model.User
 
 class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
     SignUpFragment.SignUpFragmentActions {

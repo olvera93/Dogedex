@@ -9,7 +9,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.auth.ui.theme.DogedexTheme
 import com.olvera.dogedex.main.MainActivity
-import com.olvera.dogedex.model.User
+import com.olvera.dogedex.core.model.User
 import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalFoundationApi

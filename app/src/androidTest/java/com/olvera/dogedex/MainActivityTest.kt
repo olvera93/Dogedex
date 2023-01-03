@@ -17,14 +17,14 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import coil.annotation.ExperimentalCoilApi
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.di.ClassifierTasksModule
 import com.olvera.dogedex.di.DogTasksModule
 import com.olvera.dogedex.doglist.DogTasks
 import com.olvera.dogedex.machinelearning.ClassifierTasks
 import com.olvera.dogedex.machinelearning.DogRecognition
 import com.olvera.dogedex.main.MainActivity
-import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.core.model.Dog
 import com.olvera.dogedex.testutils.EspressoIdlingResource
 import dagger.Binds
 import dagger.Module
@@ -57,17 +57,17 @@ class MainActivityTest {
 
 
     class FakeDogRepository @Inject constructor() : DogTasks {
-        override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
-            return ApiResponseStatus.Loading()
+        override suspend fun getDogCollection(): com.olvera.dogedex.core.api.ApiResponseStatus<List<com.olvera.dogedex.core.model.Dog>> {
+            return com.olvera.dogedex.core.api.ApiResponseStatus.Loading()
         }
 
-        override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> {
+        override suspend fun addDogToUser(dogId: Long): com.olvera.dogedex.core.api.ApiResponseStatus<Any> {
             TODO("Not yet implemented")
         }
 
-        override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
-            return ApiResponseStatus.Success(
-                Dog(
+        override suspend fun getDogByMlId(mlDogId: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.Dog> {
+            return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
+                com.olvera.dogedex.core.model.Dog(
                     89,
                     70,
                     "Chow Chow",

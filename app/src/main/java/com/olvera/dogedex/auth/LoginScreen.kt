@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.R
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.composables.AuthField
 
 @Composable
@@ -30,7 +30,7 @@ import com.olvera.dogedex.composables.AuthField
 @ExperimentalCoilApi
 fun LoginScreen(
     onLoginButtonClick: (String, String) -> Unit,
-    status: ApiResponseStatus<Any>? = null,
+    status: com.olvera.dogedex.core.api.ApiResponseStatus<Any>? = null,
     onRegisterButtonClick: () -> Unit,
     authViewModel: AuthViewModel
 

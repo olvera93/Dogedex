@@ -6,7 +6,7 @@
 
         <variable
             name="dog"
-            type="com.olvera.dogedex.model.Dog" />
+            type="com.olvera.dogedex.core.model.Dog" />
     </data>
 
     <FrameLayout

@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.doglist.DogTasks
 import com.olvera.dogedex.machinelearning.Classifier
 import com.olvera.dogedex.machinelearning.ClassifierTasks
 import com.olvera.dogedex.machinelearning.DogRecognition
-import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.core.model.Dog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

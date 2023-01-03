@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.R
 import com.olvera.dogedex.doglist.ui.theme.DogedexTheme
-import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.core.model.Dog
 
 @ExperimentalCoilApi
 @Composable

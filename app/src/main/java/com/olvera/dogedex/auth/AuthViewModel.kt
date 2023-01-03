@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.olvera.dogedex.R
-import com.olvera.dogedex.api.ApiResponseStatus
-import com.olvera.dogedex.model.User
+import com.olvera.dogedex.core.api.ApiResponseStatus
+import com.olvera.dogedex.core.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -82,8 +82,8 @@ class AuthViewModel @Inject constructor(
         confirmPasswordError.value = null
     }
 
-    private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<User>) {
-        if (apiResponseStatus is ApiResponseStatus.Success) {
+    private fun handleResponseStatus(apiResponseStatus: com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.User>) {
+        if (apiResponseStatus is com.olvera.dogedex.core.api.ApiResponseStatus.Success) {
             user.value = apiResponseStatus.data!!
         }
         status.value = apiResponseStatus

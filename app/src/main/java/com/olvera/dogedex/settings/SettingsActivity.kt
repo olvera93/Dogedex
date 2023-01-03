@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.olvera.dogedex.auth.LoginActivity
 import com.olvera.dogedex.databinding.ActivitySettingsBinding
-import com.olvera.dogedex.model.User
+import com.olvera.dogedex.core.model.User
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -25,7 +25,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun logout() {
-        User.logout(this)
+        com.olvera.dogedex.core.model.User.logout(this)
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)

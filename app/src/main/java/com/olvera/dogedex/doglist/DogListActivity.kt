@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import coil.annotation.ExperimentalCoilApi
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.databinding.ActivityDogListBinding
 import com.olvera.dogedex.dogdetail.DogDetailComposeActivity
 

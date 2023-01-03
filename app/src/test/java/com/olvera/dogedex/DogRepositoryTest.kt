@@ -1,11 +1,11 @@
 package com.olvera.dogedex
 
-import com.olvera.dogedex.api.ApiResponseStatus
-import com.olvera.dogedex.api.ApiService
-import com.olvera.dogedex.api.dto.AddDogToUserDto
-import com.olvera.dogedex.api.dto.DogDto
-import com.olvera.dogedex.api.dto.SignInDto
-import com.olvera.dogedex.api.dto.SignUpDto
+import com.olvera.dogedex.core.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiService
+import com.olvera.dogedex.core.api.dto.AddDogToUserDto
+import com.olvera.dogedex.core.api.dto.DogDto
+import com.olvera.dogedex.core.api.dto.SignInDto
+import com.olvera.dogedex.core.api.dto.SignUpDto
 import com.olvera.dogedex.api.responses.*
 import com.olvera.dogedex.doglist.DogRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,45 +22,81 @@ class DogRepositoryTest {
     @Test
     fun testGetDogCollectionsSuccess(): Unit = runBlocking {
 
-        class FakeService : ApiService {
-            override suspend fun getAllDogs(): DogListApiResponse {
-                return DogListApiResponse(
+        class FakeService : com.olvera.dogedex.core.api.ApiService {
+            override suspend fun getAllDogs(): com.olvera.dogedex.core.api.responses.DogListApiResponse {
+                return com.olvera.dogedex.core.api.responses.DogListApiResponse(
                     message = "",
                     isSuccess = true,
-                    data = DogListResponse(
+                    data = com.olvera.dogedex.core.api.responses.DogListResponse(
                         listOf(
-                            DogDto(1, 1, "Wartoortle", "", "", "", "", "", "", "", ""),
-                            DogDto(2, 2, "Charmeleon", "", "", "", "", "", "", "", "")
+                            com.olvera.dogedex.core.api.dto.DogDto(
+                                1,
+                                1,
+                                "Wartoortle",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""
+                            ),
+                            com.olvera.dogedex.core.api.dto.DogDto(
+                                2,
+                                2,
+                                "Charmeleon",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""
+                            )
                         )
                     )
                 )
             }
 
-            override suspend fun signUp(signUpDto: SignUpDto): AuthApiResponse {
+            override suspend fun signUp(signUpDto: com.olvera.dogedex.core.api.dto.SignUpDto): com.olvera.dogedex.core.api.responses.AuthApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun signIn(signInDto: SignInDto): AuthApiResponse {
+            override suspend fun signIn(signInDto: com.olvera.dogedex.core.api.dto.SignInDto): com.olvera.dogedex.core.api.responses.AuthApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun addDogToUser(addDogToUserDto: AddDogToUserDto): DefaultResponse {
+            override suspend fun addDogToUser(addDogToUserDto: com.olvera.dogedex.core.api.dto.AddDogToUserDto): com.olvera.dogedex.core.api.responses.DefaultResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getUserDogs(): DogListApiResponse {
-                return DogListApiResponse(
+            override suspend fun getUserDogs(): com.olvera.dogedex.core.api.responses.DogListApiResponse {
+                return com.olvera.dogedex.core.api.responses.DogListApiResponse(
                     message = "",
                     isSuccess = true,
-                    data = DogListResponse(
+                    data = com.olvera.dogedex.core.api.responses.DogListResponse(
                         listOf(
-                            DogDto(2, 2, "Charmeleon", "", "", "", "", "", "", "", "")
+                            com.olvera.dogedex.core.api.dto.DogDto(
+                                2,
+                                2,
+                                "Charmeleon",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""
+                            )
                         )
                     )
                 )
             }
 
-            override suspend fun getDogByMlId(mlId: String): DogApiResponse {
+            override suspend fun getDogByMlId(mlId: String): com.olvera.dogedex.core.api.responses.DogApiResponse {
                 TODO("Not yet implemented")
             }
 
@@ -73,9 +109,9 @@ class DogRepositoryTest {
         )
 
         val apiResponseStatus = dogRepository.getDogCollection()
-        assert(apiResponseStatus is ApiResponseStatus.Success)
+        assert(apiResponseStatus is com.olvera.dogedex.core.api.ApiResponseStatus.Success)
 
-        val dogCollection = (apiResponseStatus as ApiResponseStatus.Success).data
+        val dogCollection = (apiResponseStatus as com.olvera.dogedex.core.api.ApiResponseStatus.Success).data
         assertEquals(2, dogCollection.size)
 
         assertEquals("Charmeleon", dogCollection[1].name)
@@ -86,36 +122,48 @@ class DogRepositoryTest {
     @Test
     fun testGetAllDogsError(): Unit = runBlocking {
 
-        class FakeService : ApiService {
-            override suspend fun getAllDogs(): DogListApiResponse {
+        class FakeService : com.olvera.dogedex.core.api.ApiService {
+            override suspend fun getAllDogs(): com.olvera.dogedex.core.api.responses.DogListApiResponse {
                 throw UnknownHostException()
             }
 
-            override suspend fun signUp(signUpDto: SignUpDto): AuthApiResponse {
+            override suspend fun signUp(signUpDto: com.olvera.dogedex.core.api.dto.SignUpDto): com.olvera.dogedex.core.api.responses.AuthApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun signIn(signInDto: SignInDto): AuthApiResponse {
+            override suspend fun signIn(signInDto: com.olvera.dogedex.core.api.dto.SignInDto): com.olvera.dogedex.core.api.responses.AuthApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun addDogToUser(addDogToUserDto: AddDogToUserDto): DefaultResponse {
+            override suspend fun addDogToUser(addDogToUserDto: com.olvera.dogedex.core.api.dto.AddDogToUserDto): com.olvera.dogedex.core.api.responses.DefaultResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getUserDogs(): DogListApiResponse {
-                return DogListApiResponse(
+            override suspend fun getUserDogs(): com.olvera.dogedex.core.api.responses.DogListApiResponse {
+                return com.olvera.dogedex.core.api.responses.DogListApiResponse(
                     message = "",
                     isSuccess = true,
-                    data = DogListResponse(
+                    data = com.olvera.dogedex.core.api.responses.DogListResponse(
                         listOf(
-                            DogDto(2, 2, "Charmeleon", "", "", "", "", "", "", "", "")
+                            com.olvera.dogedex.core.api.dto.DogDto(
+                                2,
+                                2,
+                                "Charmeleon",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""
+                            )
                         )
                     )
                 )
             }
 
-            override suspend fun getDogByMlId(mlId: String): DogApiResponse {
+            override suspend fun getDogByMlId(mlId: String): com.olvera.dogedex.core.api.responses.DogApiResponse {
                 TODO("Not yet implemented")
             }
 
@@ -128,11 +176,11 @@ class DogRepositoryTest {
         )
 
         val apiResponseStatus = dogRepository.getDogCollection()
-        assert(apiResponseStatus is ApiResponseStatus.Error)
+        assert(apiResponseStatus is com.olvera.dogedex.core.api.ApiResponseStatus.Error)
 
         assertEquals(
             R.string.unknown_host_exception_error,
-            (apiResponseStatus as ApiResponseStatus.Error).messageId
+            (apiResponseStatus as com.olvera.dogedex.core.api.ApiResponseStatus.Error).messageId
         )
 
     }
@@ -143,33 +191,45 @@ class DogRepositoryTest {
 
         val resultDogId = 2L
 
-        class FakeService : ApiService {
-            override suspend fun getAllDogs(): DogListApiResponse {
+        class FakeService : com.olvera.dogedex.core.api.ApiService {
+            override suspend fun getAllDogs(): com.olvera.dogedex.core.api.responses.DogListApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun signUp(signUpDto: SignUpDto): AuthApiResponse {
+            override suspend fun signUp(signUpDto: com.olvera.dogedex.core.api.dto.SignUpDto): com.olvera.dogedex.core.api.responses.AuthApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun signIn(signInDto: SignInDto): AuthApiResponse {
+            override suspend fun signIn(signInDto: com.olvera.dogedex.core.api.dto.SignInDto): com.olvera.dogedex.core.api.responses.AuthApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun addDogToUser(addDogToUserDto: AddDogToUserDto): DefaultResponse {
+            override suspend fun addDogToUser(addDogToUserDto: com.olvera.dogedex.core.api.dto.AddDogToUserDto): com.olvera.dogedex.core.api.responses.DefaultResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getUserDogs(): DogListApiResponse {
+            override suspend fun getUserDogs(): com.olvera.dogedex.core.api.responses.DogListApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getDogByMlId(mlId: String): DogApiResponse {
-                return DogApiResponse(
+            override suspend fun getDogByMlId(mlId: String): com.olvera.dogedex.core.api.responses.DogApiResponse {
+                return com.olvera.dogedex.core.api.responses.DogApiResponse(
                     message = "",
                     isSuccess = true,
-                    data = DogResponse(
-                        DogDto(resultDogId, 2, "Charmeleon", "", "", "", "", "", "", "", "")
+                    data = com.olvera.dogedex.core.api.responses.DogResponse(
+                        com.olvera.dogedex.core.api.dto.DogDto(
+                            resultDogId,
+                            2,
+                            "Charmeleon",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""
+                        )
                     )
                 )
             }
@@ -181,8 +241,8 @@ class DogRepositoryTest {
         )
 
         val apiResponseStatus = dogRepository.getDogByMlId("2")
-        assert(apiResponseStatus is ApiResponseStatus.Success)
-        assertEquals( resultDogId,(apiResponseStatus as ApiResponseStatus.Success).data.id)
+        assert(apiResponseStatus is com.olvera.dogedex.core.api.ApiResponseStatus.Success)
+        assertEquals( resultDogId,(apiResponseStatus as com.olvera.dogedex.core.api.ApiResponseStatus.Success).data.id)
 
     }
 
@@ -191,33 +251,45 @@ class DogRepositoryTest {
 
         val resultDogId = 2L
 
-        class FakeService : ApiService {
-            override suspend fun getAllDogs(): DogListApiResponse {
+        class FakeService : com.olvera.dogedex.core.api.ApiService {
+            override suspend fun getAllDogs(): com.olvera.dogedex.core.api.responses.DogListApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun signUp(signUpDto: SignUpDto): AuthApiResponse {
+            override suspend fun signUp(signUpDto: com.olvera.dogedex.core.api.dto.SignUpDto): com.olvera.dogedex.core.api.responses.AuthApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun signIn(signInDto: SignInDto): AuthApiResponse {
+            override suspend fun signIn(signInDto: com.olvera.dogedex.core.api.dto.SignInDto): com.olvera.dogedex.core.api.responses.AuthApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun addDogToUser(addDogToUserDto: AddDogToUserDto): DefaultResponse {
+            override suspend fun addDogToUser(addDogToUserDto: com.olvera.dogedex.core.api.dto.AddDogToUserDto): com.olvera.dogedex.core.api.responses.DefaultResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getUserDogs(): DogListApiResponse {
+            override suspend fun getUserDogs(): com.olvera.dogedex.core.api.responses.DogListApiResponse {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getDogByMlId(mlId: String): DogApiResponse {
-                return DogApiResponse(
+            override suspend fun getDogByMlId(mlId: String): com.olvera.dogedex.core.api.responses.DogApiResponse {
+                return com.olvera.dogedex.core.api.responses.DogApiResponse(
                     message = "error_getting_dog_by_ml_id",
                     isSuccess = false,
-                    data = DogResponse(
-                        DogDto(resultDogId, 2, "Charmeleon", "", "", "", "", "", "", "", "")
+                    data = com.olvera.dogedex.core.api.responses.DogResponse(
+                        com.olvera.dogedex.core.api.dto.DogDto(
+                            resultDogId,
+                            2,
+                            "Charmeleon",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""
+                        )
                     )
                 )
             }
@@ -229,8 +301,8 @@ class DogRepositoryTest {
         )
 
         val apiResponseStatus = dogRepository.getDogByMlId("2")
-        assert(apiResponseStatus is ApiResponseStatus.Error)
-        assertEquals( R.string.unknown_error,(apiResponseStatus as ApiResponseStatus.Error).messageId)
+        assert(apiResponseStatus is com.olvera.dogedex.core.api.ApiResponseStatus.Error)
+        assertEquals( R.string.unknown_error,(apiResponseStatus as com.olvera.dogedex.core.api.ApiResponseStatus.Error).messageId)
 
     }
 

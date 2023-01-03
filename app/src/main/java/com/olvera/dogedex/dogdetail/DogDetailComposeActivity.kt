@@ -1,15 +1,10 @@
 package com.olvera.dogedex.dogdetail
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import coil.annotation.ExperimentalCoilApi
-import com.olvera.dogedex.R
-import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.dogdetail.ui.theme.DogedexTheme
-import com.olvera.dogedex.model.Dog
 import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalCoilApi

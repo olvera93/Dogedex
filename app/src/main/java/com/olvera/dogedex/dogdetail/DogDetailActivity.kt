@@ -6,9 +6,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import coil.load
-import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.core.model.Dog
 import com.olvera.dogedex.R
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.databinding.ActivityDogDetailBinding
 
 class DogDetailActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class DogDetailActivity : AppCompatActivity() {
         binding = ActivityDogDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val dog = intent?.extras?.getParcelable<Dog>(DOG_KEY)
+        val dog = intent?.extras?.getParcelable<com.olvera.dogedex.core.model.Dog>(DOG_KEY)
         val isRecognition = intent?.extras?.getBoolean(IS_RECOGNITION_KEY, false) ?: false
 
         if (dog == null) {

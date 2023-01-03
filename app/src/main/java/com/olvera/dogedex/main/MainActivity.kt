@@ -22,8 +22,8 @@ import androidx.core.content.ContextCompat
 import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.LABEL_PATH
 import com.olvera.dogedex.MODEL_PATH
-import com.olvera.dogedex.api.ApiResponseStatus
-import com.olvera.dogedex.api.ApiServiceInterceptor
+import com.olvera.dogedex.core.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiServiceInterceptor
 import com.olvera.dogedex.auth.LoginActivity
 import com.olvera.dogedex.auth.LoginComposeActivity
 import com.olvera.dogedex.databinding.ActivityMainBinding
@@ -31,8 +31,8 @@ import com.olvera.dogedex.dogdetail.DogDetailComposeActivity
 import com.olvera.dogedex.doglist.DogListActivity
 import com.olvera.dogedex.doglist.DogListComposeActivity
 import com.olvera.dogedex.machinelearning.DogRecognition
-import com.olvera.dogedex.model.Dog
-import com.olvera.dogedex.model.User
+import com.olvera.dogedex.core.model.Dog
+import com.olvera.dogedex.core.model.User
 import com.olvera.dogedex.settings.SettingsActivity
 import com.olvera.dogedex.testutils.EspressoIdlingResource
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,12 +76,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val user = User.getLoggedInUser(this)
+        val user = com.olvera.dogedex.core.model.User.getLoggedInUser(this)
         if (user == null) {
             openLoginActivity()
             return
         } else {
-            ApiServiceInterceptor.setSessionToken(user.authenticationToken)
+            com.olvera.dogedex.core.api.ApiServiceInterceptor.setSessionToken(user.authenticationToken)
         }
 
         binding.settingsFab.setOnClickListener {
@@ -94,13 +94,13 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.status.observe(this) { status ->
             when (status) {
-                is ApiResponseStatus.Error -> {
+                is com.olvera.dogedex.core.api.ApiResponseStatus.Error -> {
                     binding.loadingWheel.visibility = View.GONE
                     Toast.makeText(this, status.messageId, Toast.LENGTH_SHORT).show()
                 }
 
-                is ApiResponseStatus.Loading -> binding.loadingWheel.visibility = View.VISIBLE
-                is ApiResponseStatus.Success -> binding.loadingWheel.visibility = View.GONE
+                is com.olvera.dogedex.core.api.ApiResponseStatus.Loading -> binding.loadingWheel.visibility = View.VISIBLE
+                is com.olvera.dogedex.core.api.ApiResponseStatus.Success -> binding.loadingWheel.visibility = View.GONE
             }
 
         }
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun openDetailActivity(dog: Dog) {
+    private fun openDetailActivity(dog: com.olvera.dogedex.core.model.Dog) {
         val intent = Intent(this, DogDetailComposeActivity::class.java)
         intent.putExtra(DogDetailComposeActivity.DOG_KEY, dog)
         intent.putExtra(DogDetailComposeActivity.MOST_PROBABLE_DOGS_IDS, ArrayList<String>(viewModel.probableDogIds))

@@ -9,12 +9,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.auth.AuthNavDestinations.LoginScreenDestination
 import com.olvera.dogedex.auth.AuthNavDestinations.SignUpScreenDestination
 import com.olvera.dogedex.composables.ErrorDialog
 import com.olvera.dogedex.composables.LoadingWheel
-import com.olvera.dogedex.model.User
+import com.olvera.dogedex.core.model.User
 
 @Composable
 @ExperimentalCoilApi
@@ -37,11 +37,13 @@ fun AuthScreen(
     AuthNavHost(
         navController = navController,
         onLoginButtonClick = { email, password -> authViewModel.signIn(email, password) },
-        onSignUpButtonClick = { email, password, confirmPassword -> authViewModel.signUp(
-            email,
-            password,
-            confirmPassword
-        ) },
+        onSignUpButtonClick = { email, password, confirmPassword ->
+            authViewModel.signUp(
+                email,
+                password,
+                confirmPassword
+            )
+        },
         authViewModel = authViewModel
     )
 

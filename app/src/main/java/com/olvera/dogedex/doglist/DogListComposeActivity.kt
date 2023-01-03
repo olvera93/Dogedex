@@ -10,7 +10,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import coil.annotation.ExperimentalCoilApi
 import com.olvera.dogedex.dogdetail.DogDetailComposeActivity
 import com.olvera.dogedex.doglist.ui.theme.DogedexTheme
-import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.core.model.Dog
 import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalCoilApi

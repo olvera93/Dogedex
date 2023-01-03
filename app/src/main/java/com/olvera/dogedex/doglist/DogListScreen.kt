@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.core.model.Dog
 import com.olvera.dogedex.R
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.composables.BackNavigationIcon
 import com.olvera.dogedex.composables.ErrorDialog
 import com.olvera.dogedex.composables.LoadingWheel

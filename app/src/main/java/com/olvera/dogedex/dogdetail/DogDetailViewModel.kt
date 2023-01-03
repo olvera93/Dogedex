@@ -3,9 +3,9 @@ package com.olvera.dogedex.dogdetail
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import coil.annotation.ExperimentalCoilApi
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.doglist.DogTasks
-import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.core.model.Dog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,13 +46,13 @@ class DogDetailViewModel @Inject constructor(
         viewModelScope.launch {
             dogRepository.getProbableDogs(probableDogsIds.value)
                 .collect { apiResponseStatus ->
-                if (apiResponseStatus is ApiResponseStatus.Success) {
-                    _probableDogList.value.add(apiResponseStatus.data)
-                    val probableDogMutableList = _probableDogList.value.toMutableList()
-                    probableDogMutableList.add(apiResponseStatus.data)
-                    _probableDogList.value = probableDogMutableList
+                    if (apiResponseStatus is ApiResponseStatus.Success) {
+                        _probableDogList.value.add(apiResponseStatus.data)
+                        val probableDogMutableList = _probableDogList.value.toMutableList()
+                        probableDogMutableList.add(apiResponseStatus.data)
+                        _probableDogList.value = probableDogMutableList
+                    }
                 }
-            }
         }
     }
 

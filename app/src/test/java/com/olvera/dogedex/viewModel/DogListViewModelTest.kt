@@ -1,9 +1,9 @@
 package com.olvera.dogedex.viewModel
 
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.doglist.DogListViewModel
 import com.olvera.dogedex.doglist.DogTasks
-import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.core.model.Dog
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
@@ -19,24 +19,63 @@ class DogListViewModelTest {
     fun downloadDogListStatusesCorrect() {
 
         class FakeDogRepository : DogTasks {
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
-                return ApiResponseStatus.Success(
+            override suspend fun getDogCollection(): com.olvera.dogedex.core.api.ApiResponseStatus<List<com.olvera.dogedex.core.model.Dog>> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
                     listOf(
-                        Dog(1, 1, "", "", "", "", "", "", "", "", "", inCollection = false),
-                        Dog(2, 2, "", "", "", "", "", "", "", "", "", inCollection = false)
+                        com.olvera.dogedex.core.model.Dog(
+                            1,
+                            1,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            inCollection = false
+                        ),
+                        com.olvera.dogedex.core.model.Dog(
+                            2,
+                            2,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            inCollection = false
+                        )
                     )
                 )
             }
 
-            override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> {
-                return ApiResponseStatus.Success(
+            override suspend fun addDogToUser(dogId: Long): com.olvera.dogedex.core.api.ApiResponseStatus<Any> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
                     Unit
                 )
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
-                return ApiResponseStatus.Success(
-                    Dog(1, 1, "", "", "", "", "", "", "", "", "", inCollection = false)
+            override suspend fun getDogByMlId(mlDogId: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.Dog> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
+                    com.olvera.dogedex.core.model.Dog(
+                        1,
+                        1,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        inCollection = false
+                    )
                 )
             }
 
@@ -48,7 +87,7 @@ class DogListViewModelTest {
 
         assertEquals(2, viewModel.dogList.value.size)
         assertEquals(2, viewModel.dogList.value[1].id)
-        assert(viewModel.status.value is ApiResponseStatus.Success)
+        assert(viewModel.status.value is com.olvera.dogedex.core.api.ApiResponseStatus.Success)
 
     }
 
@@ -57,19 +96,32 @@ class DogListViewModelTest {
     fun downloadDogListErrorStatusesCorrect() {
 
         class FakeDogRepository : DogTasks {
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
-                return ApiResponseStatus.Error(messageId = 12)
+            override suspend fun getDogCollection(): com.olvera.dogedex.core.api.ApiResponseStatus<List<com.olvera.dogedex.core.model.Dog>> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Error(messageId = 12)
             }
 
-            override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> {
-                return ApiResponseStatus.Success(
+            override suspend fun addDogToUser(dogId: Long): com.olvera.dogedex.core.api.ApiResponseStatus<Any> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
                     Unit
                 )
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
-                return ApiResponseStatus.Success(
-                    Dog(1, 1, "", "", "", "", "", "", "", "", "", inCollection = false)
+            override suspend fun getDogByMlId(mlDogId: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.Dog> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
+                    com.olvera.dogedex.core.model.Dog(
+                        1,
+                        1,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        inCollection = false
+                    )
                 )
             }
 
@@ -80,7 +132,7 @@ class DogListViewModelTest {
         )
 
         assertEquals(0, viewModel.dogList.value.size)
-        assert(viewModel.status.value is ApiResponseStatus.Error)
+        assert(viewModel.status.value is com.olvera.dogedex.core.api.ApiResponseStatus.Error)
 
     }
 
@@ -88,19 +140,32 @@ class DogListViewModelTest {
     fun resetStatusCorrect() {
 
         class FakeDogRepository : DogTasks {
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
-                return ApiResponseStatus.Error(messageId = 12)
+            override suspend fun getDogCollection(): com.olvera.dogedex.core.api.ApiResponseStatus<List<com.olvera.dogedex.core.model.Dog>> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Error(messageId = 12)
             }
 
-            override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> {
-                return ApiResponseStatus.Success(
+            override suspend fun addDogToUser(dogId: Long): com.olvera.dogedex.core.api.ApiResponseStatus<Any> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
                     Unit
                 )
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
-                return ApiResponseStatus.Success(
-                    Dog(1, 1, "", "", "", "", "", "", "", "", "", inCollection = false)
+            override suspend fun getDogByMlId(mlDogId: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.Dog> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
+                    com.olvera.dogedex.core.model.Dog(
+                        1,
+                        1,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        inCollection = false
+                    )
                 )
             }
 
@@ -110,7 +175,7 @@ class DogListViewModelTest {
             dogRepository = FakeDogRepository()
         )
 
-        assert(viewModel.status.value is ApiResponseStatus.Error)
+        assert(viewModel.status.value is com.olvera.dogedex.core.api.ApiResponseStatus.Error)
 
         viewModel.resetApiResponseStatus()
 

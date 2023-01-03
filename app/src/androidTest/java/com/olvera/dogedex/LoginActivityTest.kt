@@ -9,11 +9,11 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import coil.annotation.ExperimentalCoilApi
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.auth.AuthTasks
 import com.olvera.dogedex.auth.LoginComposeActivity
 import com.olvera.dogedex.di.AuthTasksModule
-import com.olvera.dogedex.model.User
+import com.olvera.dogedex.core.model.User
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -39,9 +39,9 @@ class LoginActivityTest {
     val composeTestRule = createAndroidComposeRule<LoginComposeActivity>()
 
     class FakeAuthRepository @Inject constructor() : AuthTasks {
-        override suspend fun signIn(email: String, password: String): ApiResponseStatus<User> {
-            return ApiResponseStatus.Success(
-                User(1L, "olvera9@gmail.com", "1knjn3223")
+        override suspend fun signIn(email: String, password: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.User> {
+            return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
+                com.olvera.dogedex.core.model.User(1L, "olvera9@gmail.com", "1knjn3223")
             )
         }
 
@@ -49,7 +49,7 @@ class LoginActivityTest {
             email: String,
             password: String,
             passwordConfirmation: String
-        ): ApiResponseStatus<User> {
+        ): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.User> {
             TODO("Not yet implemented")
         }
 

@@ -3,8 +3,8 @@ package com.olvera.dogedex.doglist
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.olvera.dogedex.model.Dog
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.model.Dog
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

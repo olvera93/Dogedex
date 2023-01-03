@@ -5,11 +5,11 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import coil.annotation.ExperimentalCoilApi
-import com.olvera.dogedex.api.ApiResponseStatus
+import com.olvera.dogedex.core.api.ApiResponseStatus
 import com.olvera.dogedex.doglist.DogListScreen
 import com.olvera.dogedex.doglist.DogListViewModel
 import com.olvera.dogedex.doglist.DogTasks
-import com.olvera.dogedex.model.Dog
+import com.olvera.dogedex.core.model.Dog
 import org.junit.Rule
 import org.junit.Test
 
@@ -25,15 +25,15 @@ class DogListScreenTest {
     fun progressBarShowsWhenLoadingState() {
 
         class FakeDogRepository : DogTasks {
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
-                return ApiResponseStatus.Loading()
+            override suspend fun getDogCollection(): com.olvera.dogedex.core.api.ApiResponseStatus<List<com.olvera.dogedex.core.model.Dog>> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Loading()
             }
 
-            override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> {
+            override suspend fun addDogToUser(dogId: Long): com.olvera.dogedex.core.api.ApiResponseStatus<Any> {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+            override suspend fun getDogByMlId(mlDogId: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.Dog> {
                 TODO("Not yet implemented")
             }
 
@@ -58,15 +58,15 @@ class DogListScreenTest {
     fun errorDialogShowsIfGettingDogs() {
 
         class FakeDogRepository : DogTasks {
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
-                return ApiResponseStatus.Error(messageId = R.string.there_was_an_error)
+            override suspend fun getDogCollection(): com.olvera.dogedex.core.api.ApiResponseStatus<List<com.olvera.dogedex.core.model.Dog>> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Error(messageId = R.string.there_was_an_error)
             }
 
-            override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> {
+            override suspend fun addDogToUser(dogId: Long): com.olvera.dogedex.core.api.ApiResponseStatus<Any> {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+            override suspend fun getDogByMlId(mlDogId: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.Dog> {
                 TODO("Not yet implemented")
             }
 
@@ -94,20 +94,46 @@ class DogListScreenTest {
         val dog2Name = "Husky"
 
         class FakeDogRepository : DogTasks {
-            override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
-                return ApiResponseStatus.Success(
+            override suspend fun getDogCollection(): com.olvera.dogedex.core.api.ApiResponseStatus<List<com.olvera.dogedex.core.model.Dog>> {
+                return com.olvera.dogedex.core.api.ApiResponseStatus.Success(
                     listOf(
-                        Dog(1, 1, dog1Name, "", "", "", "", "", "", "", "", inCollection = true),
-                        Dog(2, 23, dog2Name, "", "", "", "", "", "", "", "", inCollection = false)
+                        com.olvera.dogedex.core.model.Dog(
+                            1,
+                            1,
+                            dog1Name,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            inCollection = true
+                        ),
+                        com.olvera.dogedex.core.model.Dog(
+                            2,
+                            23,
+                            dog2Name,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            inCollection = false
+                        )
                     )
                 )
             }
 
-            override suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any> {
+            override suspend fun addDogToUser(dogId: Long): com.olvera.dogedex.core.api.ApiResponseStatus<Any> {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog> {
+            override suspend fun getDogByMlId(mlDogId: String): com.olvera.dogedex.core.api.ApiResponseStatus<com.olvera.dogedex.core.model.Dog> {
                 TODO("Not yet implemented")
             }
 
