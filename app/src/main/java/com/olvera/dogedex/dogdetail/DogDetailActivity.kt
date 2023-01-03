@@ -63,7 +63,7 @@ class DogDetailActivity : AppCompatActivity() {
 
         binding.closeButton.setOnClickListener {
             if (isRecognition) {
-                viewModel.addDogToUser(dog.id)
+                //viewModel.addDogToUser(dog.id)
             } else {
                 finish()
             }

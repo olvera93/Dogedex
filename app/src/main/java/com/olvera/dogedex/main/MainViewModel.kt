@@ -6,23 +6,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.olvera.dogedex.api.ApiResponseStatus
-import com.olvera.dogedex.doglist.DogRepository
 import com.olvera.dogedex.doglist.DogTasks
 import com.olvera.dogedex.machinelearning.Classifier
-import com.olvera.dogedex.machinelearning.ClassifierRepository
 import com.olvera.dogedex.machinelearning.ClassifierTasks
 import com.olvera.dogedex.machinelearning.DogRecognition
 import com.olvera.dogedex.model.Dog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.nio.MappedByteBuffer
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val dogRepository: DogTasks,
     private val classifierRepository: ClassifierTasks
-): ViewModel() {
+) : ViewModel() {
 
     private val _dog = MutableLiveData<Dog>()
     val dog: LiveData<Dog> get() = _dog
@@ -35,12 +32,29 @@ class MainViewModel @Inject constructor(
 
     private lateinit var classifier: Classifier
 
+    val probableDogIds = mutableListOf<String>()
+
+
     fun reconizeImage(imageProxy: ImageProxy) {
         viewModelScope.launch {
-            _dogRecognition.value =
-                classifierRepository.recognizeImage(imageProxy)
+            val dogRecognitionList = classifierRepository.recognizeImage(imageProxy)
+            updateDogReconotion(dogRecognitionList)
+            updateProbableDogIds(dogRecognitionList)
             imageProxy.close()
         }
+    }
+
+    private fun updateProbableDogIds(dogRecognitionList: List<DogRecognition>) {
+        probableDogIds.clear()
+        if (dogRecognitionList.size >= 5) {
+            probableDogIds.addAll(dogRecognitionList.subList(1, 4).map {
+                it.id
+            })
+        }
+    }
+
+    private fun updateDogReconotion(dogRecognitionList: List<DogRecognition>) {
+        _dogRecognition.value = dogRecognitionList.first()
     }
 
     fun getDogByMlId(mlDogId: String) {

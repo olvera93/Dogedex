@@ -4,14 +4,15 @@ import com.olvera.dogedex.R
 import com.olvera.dogedex.model.Dog
 import com.olvera.dogedex.api.ApiResponseStatus
 import com.olvera.dogedex.api.ApiService
-import com.olvera.dogedex.api.DogsApi.retrofitService
 import com.olvera.dogedex.api.dto.AddDogToUserDto
 import com.olvera.dogedex.api.dto.DogDtoMapper
 import com.olvera.dogedex.api.makeNetworkCall
 import com.olvera.dogedex.di.DispatchersModule
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -19,13 +20,14 @@ interface DogTasks {
     suspend fun getDogCollection(): ApiResponseStatus<List<Dog>>
     suspend fun addDogToUser(dogId: Long): ApiResponseStatus<Any>
     suspend fun getDogByMlId(mlDogId: String): ApiResponseStatus<Dog>
+    suspend fun getProbableDogs(probableDogsIds: ArrayList<String>): Flow<ApiResponseStatus<Dog>>
 }
 
 class DogRepository @Inject constructor(
     private val apiService: ApiService,
     @DispatchersModule.IoDispatcher private val dispatcher: CoroutineDispatcher
 
-) : DogTasks{
+) : DogTasks {
 
     override suspend fun getDogCollection(): ApiResponseStatus<List<Dog>> {
         return withContext(dispatcher) {
@@ -95,9 +97,13 @@ class DogRepository @Inject constructor(
 
         val dogDtoMapper = DogDtoMapper()
         dogDtoMapper.fromDogDtoToDogDomain(response.data.dog)
-
-
-
     }
 
+    override suspend fun getProbableDogs(probableDogsIds: ArrayList<String>): Flow<ApiResponseStatus<Dog>> =
+        flow {
+            for (mlDogId in probableDogsIds) {
+                val dog = getDogByMlId(mlDogId)
+                emit(dog)
+            }
+        }.flowOn(dispatcher)
 }

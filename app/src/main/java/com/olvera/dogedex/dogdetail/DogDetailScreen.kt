@@ -9,6 +9,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.olvera.dogedex.R
@@ -33,10 +37,21 @@ import com.olvera.dogedex.model.Dog
 @ExperimentalCoilApi
 @Composable
 fun DogDetailScreen(
-    dog: Dog, status: ApiResponseStatus<Any>? = null,
-    onButtonClicked: () -> Unit,
-    onErrorDialogDismiss: () -> Unit
+    finishActivity: () -> Unit,
+    detailViewModel: DogDetailViewModel = hiltViewModel()
 ) {
+
+    val probableDogsDialogEnabled = remember {
+        mutableStateOf(false)
+    }
+
+    val status = detailViewModel.status.value
+    val dog = detailViewModel.dog.value!!
+    val isRecognition = detailViewModel.isRecognition.value
+
+    if (status is ApiResponseStatus.Success) {
+        finishActivity()
+    }
 
     Box(
         modifier = Modifier
@@ -46,7 +61,10 @@ fun DogDetailScreen(
         contentAlignment = Alignment.TopCenter
     ) {
 
-        DogInformation(dog)
+        DogInformation(dog, isRecognition) {
+            detailViewModel.getProbableDogs()
+            probableDogsDialogEnabled.value = true
+        }
         Image(
             modifier = Modifier
                 .width(270.dp)
@@ -59,7 +77,13 @@ fun DogDetailScreen(
             modifier = Modifier
                 .align(alignment = Alignment.BottomCenter)
                 .semantics { testTag = "close-details-screen-fab" },
-            onClick = { onButtonClicked() }) {
+            onClick = {
+                if (isRecognition) {
+                    detailViewModel.addDogToUser()
+                } else {
+                    finishActivity()
+                }
+            }) {
 
             Icon(
                 imageVector = Icons.Filled.Check,
@@ -71,13 +95,31 @@ fun DogDetailScreen(
         if (status is ApiResponseStatus.Loading) {
             LoadingWheel()
         } else if (status is ApiResponseStatus.Error) {
-            ErrorDialog(status.messageId, onErrorDialogDismiss)
+            ErrorDialog(status.messageId) {
+                detailViewModel.resetApiResponseStatus()
+            }
+        }
+
+        val probableDogList = detailViewModel.probableDogList.collectAsState().value
+
+        if (probableDogsDialogEnabled.value) {
+            MostProbableDogsDialog(
+                mostProbableDogs = probableDogList,
+                onShowMostProbableDogsDialogDismiss = { probableDogsDialogEnabled.value = false },
+                onItemClick = {
+                    detailViewModel.updateDog(it)
+                }
+            )
         }
     }
 }
 
 @Composable
-fun DogInformation(dog: Dog) {
+fun DogInformation(
+    dog: Dog,
+    isRecognition: Boolean,
+    onProbableDogsButtonClick: () -> Unit
+) {
 
     Box(
         modifier = Modifier
@@ -134,6 +176,21 @@ fun DogInformation(dog: Dog) {
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(top = 8.dp)
                 )
+
+                if (isRecognition) {
+
+                    Button(
+                        modifier = Modifier.padding(16.dp),
+                        onClick = { onProbableDogsButtonClick() }) {
+
+                        Text(
+                            text = stringResource(id = R.string.not_your_dog_button),
+                            textAlign = TextAlign.Center,
+                            fontSize = 18.sp
+                        )
+
+                    }
+                }
 
                 Divider(
                     modifier = Modifier.padding(
@@ -305,20 +362,10 @@ private fun DogDataColumn(
 @Composable
 @ExperimentalCoilApi
 fun DogDetailScreenPreview() {
-    val dog = Dog(
-        1L,
-        78,
-        "Pug",
-        "Herding",
-        "70",
-        "75",
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.goodhousekeeping.com%2Flife%2Fpets%2Fg4531%2Fcutest-dog-breeds%2F&psig=AOvVaw1SKXDQkSQR2MIDqgQNYZZ8&ust=1672184750556000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCKDdkuK7mPwCFQAAAAAdAAAAABAE",
-        "10 - 22",
-        "Friendly, playful",
-        "5",
-        "6"
+
+    DogDetailScreen(
+        finishActivity = { }
     )
-    DogDetailScreen(dog, onButtonClicked = { }, onErrorDialogDismiss = { })
 }
 
 

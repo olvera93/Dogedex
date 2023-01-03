@@ -122,6 +122,7 @@ class MainActivity : AppCompatActivity() {
     private fun openDetailActivity(dog: Dog) {
         val intent = Intent(this, DogDetailComposeActivity::class.java)
         intent.putExtra(DogDetailComposeActivity.DOG_KEY, dog)
+        intent.putExtra(DogDetailComposeActivity.MOST_PROBABLE_DOGS_IDS, ArrayList<String>(viewModel.probableDogIds))
         intent.putExtra(DogDetailComposeActivity.IS_RECOGNITION_KEY, true)
         startActivity(intent)
     }
